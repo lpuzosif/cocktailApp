@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_cocktail_type_options">
+        <item>@string/pref_Cocktail_label_option</item>
+        <item>@string/pref_Ordinary_Drink_label_option</item>
+    </string-array>
+    <string-array name="pref_cocktail_type_values">
+        <item>@string/pref_Cocktail_value</item>
+        <item>@string/pref_Ordinary_Drink_value</item>
+    </string-array>
+</resources>

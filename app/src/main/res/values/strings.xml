@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">CocktailApp</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">lilian@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <!--Used by Nav Drawer  -->
+    <string name="menu_home">Cocktails</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <!--Main fragment name  -->
+    <string name="home_cocktailList">Cocktail List</string>
+
+    <!--Used by blind people  -->
+    <string name="cocktail_details_image_content_descrip">Cocktail Details Image</string>
+    <string name="no_connection_image">no Connection Image</string>
+
+    <!--Used by view Model  -->
+    <string name="drink_name">Drink name:</string>
+    <string name="detailPriceTV">Price:</string>
+    <string name="detailGlassTypeTV">Glass Type:</string>
+    <string name="detailsInstructionsTV">Instructions:</string>
+    <string name="detailsDate">Instructions were modified: %s</string>
+    <string name="detailsPrice">$%s</string>
+    <string name="ingredientsTV">Ingredients:</string>
+    <string name="measure_and_ingredient">%s %s %s %s %s %s</string>
+    <string name="next_measure_and_ingredient">%s %s</string>
+
+    <!--Used by Preferences  -->
+    <!-- Label for the cocktail type preference [CHAR LIMIT=30] -->
+    <string name="pref_cocktail_type_label_title">Cocktail Type</string>
+    <!-- Label for Cocktail option in Drink type preference [CHAR LIMIT=25] -->
+    <string name="pref_Cocktail_label_option">Cocktail</string>
+
+    <!-- Label for non Alcoholic option in cocktail type preference [CHAR LIMIT=25] -->
+    <string name="pref_Ordinary_Drink_label_option">Ordinary Drink</string>
+    <!-- Key name for cocktail type preference in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_cocktail_Type_key" translatable="false">cocktailType</string>
+
+    <!-- Value in SharedPreferences for cocktail type option [CHAR LIMIT=NONE] -->
+    <string name="pref_Cocktail_value" translatable="false">Cocktail</string>
+    <!-- Value in SharedPreferences for non Alcoholic option [CHAR LIMIT=NONE] -->
+    <string name="pref_Ordinary_Drink_value" translatable="false">Ordinary_Drink</string>
+    <string name="check_your_internet_connection">Check your internet connection, the API call has fail</string>
+</resources>

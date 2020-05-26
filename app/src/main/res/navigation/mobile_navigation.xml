@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.cocktailapp.MainFragment"
+        android:label="@string/home_cocktailList"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
+            app:destination="@id/nav_home_second" />
+        <argument
+            android:name="myArg"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_nav_home_to_cocktailDetailsFragment"
+            app:destination="@id/cocktailDetailsFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_settingsActivity"
+            app:destination="@id/settingsActivity" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_home_second"
+        android:name="com.example.cocktailapp.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
+            app:destination="@id/nav_home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="com.example.cocktailapp.ui.gallery.GalleryFragment"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_gallery" />
+
+    <fragment
+        android:id="@+id/nav_slideshow"
+        android:name="com.example.cocktailapp.ui.slideshow.SlideshowFragment"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/cocktailDetailsFragment"
+        android:name="com.example.cocktailapp.ui.cocktailDetails.CocktailDetailsFragment"
+        android:label="Cocktail Details"
+        tools:layout="@layout/cocktail_detail">
+        <argument
+            android:name="cocktailIdArg"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_cocktailDetailsFragment_to_settingsActivity"
+            app:destination="@id/settingsActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment2"
+        android:name="com.example.cocktailapp.ui.settings.SettingsFragment"
+        android:label="SettingsFragment" />
+    <activity
+        android:id="@+id/settingsActivity"
+        android:name="com.example.cocktailapp.ui.settings.SettingsActivity"
+        android:label="SettingsActivity"
+        tools:layout="@layout/activity_settings"/>
+</navigation>

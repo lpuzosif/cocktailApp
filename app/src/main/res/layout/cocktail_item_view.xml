@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="cocktail"
+            type="com.example.cocktailapp.service.Cocktail" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeightLarge"
+        android:layout_margin="4dp">
+
+        <ImageView
+            android:id="@+id/cocktail_image"
+            android:layout_width="98dp"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars"
+            app:imageUrl="@{cocktail.cocktailImgSrcUrl}"/>
+
+        <TextView
+            android:id="@+id/cocktail_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="@{cocktail.cocktailName}"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cocktail_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Cosmopolitan" />
+
+        <TextView
+            android:id="@+id/cocktail_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/cocktail_name"
+            app:layout_constraintStart_toStartOf="@+id/cocktail_name"
+            app:layout_constraintTop_toBottomOf="@+id/cocktail_name"
+            tools:text="$37"
+            app:priceInList="@{cocktail.cocktailPrice}"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
