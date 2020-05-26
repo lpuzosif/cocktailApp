@@ -11,7 +11,6 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.example.cocktailapp.ui.cocktailDetails.CocktailApiStatus
 
-
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
     imgUrl?.let {

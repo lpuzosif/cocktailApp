@@ -43,7 +43,7 @@ class GalleryViewModel(private var cocktailTypeParameter : String) : ViewModel()
         getCocktailListResponse(cocktailTypeParameter)
     }
 
-    fun getCocktailListResponse(cocktailTypeParam : String) {
+    private fun getCocktailListResponse(cocktailTypeParam : String) {
 
         coroutineScope.launch {
             var getCocktailListDeferred = CocktailApi.retrofitService.getCocktailListAsync(cocktailTypeParam)

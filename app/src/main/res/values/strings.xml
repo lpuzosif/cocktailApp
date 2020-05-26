@@ -46,4 +46,6 @@
     <!-- Value in SharedPreferences for non Alcoholic option [CHAR LIMIT=NONE] -->
     <string name="pref_Ordinary_Drink_value" translatable="false">Ordinary_Drink</string>
     <string name="check_your_internet_connection">Check your internet connection, the API call has fail</string>
+    <string name="image_grid_description">Cokctail Image in Grid View</string>
+    <string name="listView_image_content_descrip">Cocktail Image in List View</string>
 </resources>

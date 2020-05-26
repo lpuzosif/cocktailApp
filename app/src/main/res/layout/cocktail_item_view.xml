@@ -12,25 +12,26 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="?android:attr/listPreferredItemHeightLarge"
-        android:layout_margin="4dp">
+        android:layout_margin="@dimen/fourDp_margin">
 
         <ImageView
             android:id="@+id/cocktail_image"
-            android:layout_width="98dp"
+            android:layout_width="@dimen/listView_image_DP"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars"
-            app:imageUrl="@{cocktail.cocktailImgSrcUrl}"/>
+            app:imageUrl="@{cocktail.cocktailImgSrcUrl}"
+            android:contentDescription="@string/listView_image_content_descrip" />
 
         <TextView
             android:id="@+id/cocktail_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/eightDp_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:text="@{cocktail.cocktailName}"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +43,7 @@
             android:id="@+id/cocktail_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/eightDp_margin"
             app:layout_constraintEnd_toEndOf="@+id/cocktail_name"
             app:layout_constraintStart_toStartOf="@+id/cocktail_name"
             app:layout_constraintTop_toBottomOf="@+id/cocktail_name"
