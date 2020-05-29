@@ -8,9 +8,8 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.example.cocktailapp.R
 import com.example.cocktailapp.databinding.CocktailDetailBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -35,7 +34,7 @@ class CocktailDetailsFragment : Fragment(){
 
         val viewModelFactory = CocktailDetailsViewModelFactory(cocktailId, application)
         val viewModel: CocktailDetailsViewModel =
-            ViewModelProviders.of(this, viewModelFactory).get(CocktailDetailsViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory).get(CocktailDetailsViewModel::class.java)
 
         // Giving the binding access to the CocktailDetailsViewModel
         binding.cocktailDetailsVieModel = viewModel
@@ -43,7 +42,7 @@ class CocktailDetailsFragment : Fragment(){
         val fab: FloatingActionButton = requireActivity().findViewById(R.id.fab)
         fab.visibility = View.VISIBLE
         fab.setOnClickListener {
-            var text : String = viewModel.getCocktailDetailsString()
+            val text : String = viewModel.getCocktailDetailsString()
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:") // only email apps should handle this
 
@@ -59,7 +58,6 @@ class CocktailDetailsFragment : Fragment(){
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-
         menu.removeGroup(R.id.menuSet)
     }
 

@@ -2,10 +2,7 @@ package com.example.cocktailapp.ui.cocktailDetails
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.cocktailapp.R
 import com.example.cocktailapp.service.Cocktail
 import com.example.cocktailapp.service.CocktailApi
@@ -17,7 +14,7 @@ import java.lang.Exception
 
 enum class CocktailApiStatus { LOADING, ERROR, DONE }
 
-class CocktailDetailsViewModel(private var drinkId: String, app: Application) : ViewModel() {
+class CocktailDetailsViewModel(private var drinkId: String, app: Application) : AndroidViewModel(app) {
 
     private val _cocktail = MutableLiveData<Cocktail>()
     val cocktail: LiveData<Cocktail> get() = _cocktail
@@ -38,7 +35,7 @@ class CocktailDetailsViewModel(private var drinkId: String, app: Application) : 
     }
 
     private fun getPrice(cocktail: Cocktail) : String {
-        var aux: String = cocktail.cocktailPrice.subSequence(0, 2).toString()
+        val aux: String = cocktail.cocktailPrice.subSequence(0, 2).toString()
         return  aux + "."  + cocktail.cocktailPrice.subSequence(2, 4)
     }
 
@@ -83,7 +80,7 @@ class CocktailDetailsViewModel(private var drinkId: String, app: Application) : 
 
         coroutineScope.launch {
             //This list only have 1 element
-            var getCocktailListDeferred =
+            val getCocktailListDeferred =
                 CocktailApi.retrofitService.getCocktailDetailsAsync(drinkId)
             try {
                 _status.value = CocktailApiStatus.LOADING

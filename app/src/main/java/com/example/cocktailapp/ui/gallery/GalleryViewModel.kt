@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.preference.PreferenceManager
-import com.example.cocktailapp.R
 import com.example.cocktailapp.service.Cocktail
 import com.example.cocktailapp.service.CocktailApi
 import com.example.cocktailapp.ui.cocktailDetails.CocktailApiStatus
@@ -15,7 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class GalleryViewModel(private var cocktailTypeParameter : String) : ViewModel() {
+class GalleryViewModel(cocktailTypeParameter : String) : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is gallery Fragment"
@@ -46,7 +44,7 @@ class GalleryViewModel(private var cocktailTypeParameter : String) : ViewModel()
     private fun getCocktailListResponse(cocktailTypeParam : String) {
 
         coroutineScope.launch {
-            var getCocktailListDeferred = CocktailApi.retrofitService.getCocktailListAsync(cocktailTypeParam)
+            val getCocktailListDeferred = CocktailApi.retrofitService.getCocktailListAsync(cocktailTypeParam)
             try {
                 _status.value = CocktailApiStatus.LOADING
                 val resultList = getCocktailListDeferred.await()

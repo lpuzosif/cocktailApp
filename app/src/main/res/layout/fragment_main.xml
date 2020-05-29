@@ -13,11 +13,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/eightDp_margin"
+            android:layout_marginTop="@dimen/eightDp_margin"
+            android:hint="@string/search_by_cocktail_name"
+            android:inputType="text"
+            app:layout_constraintEnd_toStartOf="@+id/searchButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="88dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="@dimen/eightDp_margin"
+            android:layout_marginBottom="@dimen/eightDp_margin"
+            android:background="@color/colorAccent"
+            android:text="@android:string/search_go"
+            app:layout_constraintBottom_toBottomOf="@+id/searchEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/searchEditText" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cocktail_recycleView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/eightDp_margin"
+            android:layout_marginTop="@dimen/fourDp_margin"
+            android:layout_marginEnd="@dimen/eightDp_margin"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchEditText"
             tools:listitem="@layout/cocktail_item_view" />
 
         <LinearLayout
@@ -49,5 +80,6 @@
                 android:layout_marginRight="32dp"
                 android:textStyle="bold" />
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

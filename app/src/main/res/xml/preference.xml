@@ -6,9 +6,9 @@
 
     <ListPreference
         android:defaultValue="@string/pref_Cocktail_value"
-        android:entries="@array/pref_cocktail_type_options"
-        android:entryValues="@array/pref_cocktail_type_values"
-        app:key="@string/pref_cocktail_Type_key"
+        android:entries="@array/pref_cocktail_category_options"
+        android:entryValues="@array/pref_cocktail_category_values"
+        app:key="@string/pref_cocktail_category_key"
         android:icon="@mipmap/ic_launcher"
         app:title="@string/pref_cocktail_type_label_title"
         app:useSimpleSummaryProvider="true"/>

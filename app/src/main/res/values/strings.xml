@@ -18,6 +18,9 @@
     <!--Used by blind people  -->
     <string name="cocktail_details_image_content_descrip">Cocktail Details Image</string>
     <string name="no_connection_image">no Connection Image</string>
+    <string name="check_your_internet_connection">Check your internet connection, the API call has fail</string>
+    <string name="image_grid_description">Cokctail Image in Grid View</string>
+    <string name="listView_image_content_descrip">Cocktail Image in List View</string>
 
     <!--Used by view Model  -->
     <string name="drink_name">Drink name:</string>
@@ -32,20 +35,28 @@
 
     <!--Used by Preferences  -->
     <!-- Label for the cocktail type preference [CHAR LIMIT=30] -->
-    <string name="pref_cocktail_type_label_title">Cocktail Type</string>
+    <string name="pref_cocktail_type_label_title">Cocktail Category</string>
     <!-- Label for Cocktail option in Drink type preference [CHAR LIMIT=25] -->
-    <string name="pref_Cocktail_label_option">Cocktail</string>
-
-    <!-- Label for non Alcoholic option in cocktail type preference [CHAR LIMIT=25] -->
-    <string name="pref_Ordinary_Drink_label_option">Ordinary Drink</string>
     <!-- Key name for cocktail type preference in SharedPreferences [CHAR LIMIT=NONE] -->
-    <string name="pref_cocktail_Type_key" translatable="false">cocktailType</string>
+    <string name="pref_cocktail_category_key" translatable="false">cocktailType</string>
+
+    <string name="pref_Cocktail_label_option">Cocktail</string>
+    <!-- Label for Shot option in Drink type preference [CHAR LIMIT=25] -->
+    <string name="pref_Shot_label_option">Shot</string>
+    <!-- Label for non Alcoholic option in cocktail type preference [CHAR LIMIT=25] -->
+    <string name="pref_Ordinary_Drink_label_option">Ordinary drink</string>
+    <string name="pref_Homemade_label_option">Homemade liqueur</string>
+    <string name="pref_Cocoa_label_option">Cocoa</string>
 
     <!-- Value in SharedPreferences for cocktail type option [CHAR LIMIT=NONE] -->
     <string name="pref_Cocktail_value" translatable="false">Cocktail</string>
-    <!-- Value in SharedPreferences for non Alcoholic option [CHAR LIMIT=NONE] -->
+    <!-- Value in SharedPreferences for Ordinary_Drink option [CHAR LIMIT=NONE] -->
     <string name="pref_Ordinary_Drink_value" translatable="false">Ordinary_Drink</string>
-    <string name="check_your_internet_connection">Check your internet connection, the API call has fail</string>
-    <string name="image_grid_description">Cokctail Image in Grid View</string>
-    <string name="listView_image_content_descrip">Cocktail Image in List View</string>
+    <!-- Value in SharedPreferences for shot option [CHAR LIMIT=NONE] -->
+    <string name="pref_Shot_value">Shot</string>
+    <string name="pref_Homemade_value">Homemade Liqueur</string>
+    <string name="pref_Cocoa_value">Cocoa</string>
+    <string name="search_by_cocktail_name">Search by cocktail name</string>
+    <string name="cleared_message">There are no cocktails matching your input</string>
+
 </resources>

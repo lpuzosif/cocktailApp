@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.example.cocktailapp.R
 import com.example.cocktailapp.databinding.FragmentGalleryBinding
@@ -24,11 +23,11 @@ class GalleryFragment : Fragment() {
         binding.lifecycleOwner = this
 
         //Setting
-        var cocktailTypeSetting : String = PreferenceManager.getDefaultSharedPreferences(requireActivity()).getString(getString(R.string.pref_cocktail_Type_key),
+        val cocktailTypeSetting : String = PreferenceManager.getDefaultSharedPreferences(requireActivity()).getString(getString(R.string.pref_cocktail_category_key),
             getString(R.string.pref_Cocktail_value))!!
 
         val viewModelFactory = GalleryViewModelFactory(cocktailTypeSetting)
-        val viewModel: GalleryViewModel = ViewModelProviders.of(this, viewModelFactory).get(GalleryViewModel::class.java)
+        val viewModel: GalleryViewModel = ViewModelProvider(this, viewModelFactory).get(GalleryViewModel::class.java)
 
         // Giving the binding access to the GalleryViewModel
         binding.galleryListViewModel = viewModel

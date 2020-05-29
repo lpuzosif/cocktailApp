@@ -2,19 +2,16 @@ package com.example.cocktailapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.findNavController
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.navigateUp
 import androidx.preference.PreferenceManager
 import com.example.cocktailapp.databinding.FragmentMainBinding
-import com.example.cocktailapp.ui.cocktailDetails.CocktailDetailsViewModel
-import com.example.cocktailapp.ui.cocktailDetails.CocktailDetailsViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment() {
 
@@ -27,12 +24,12 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = this
 
         //Setting
-        var cocktailTypeSetting : String = PreferenceManager.getDefaultSharedPreferences(requireActivity()).getString(getString(R.string.pref_cocktail_Type_key),
+        val cocktailTypeSetting : String = PreferenceManager.getDefaultSharedPreferences(requireActivity()).getString(getString(R.string.pref_cocktail_category_key),
             getString(R.string.pref_Cocktail_value))!!
-        Log.d("lilian onCreateSett ", cocktailTypeSetting)
+
         val viewModelFactory = CocktailListViewModelFactory(cocktailTypeSetting)
         val viewModel: CocktailListViewModel =
-            ViewModelProviders.of(this, viewModelFactory).get(CocktailListViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory).get(CocktailListViewModel::class.java)
 
         // Giving the binding access to the View Model
         binding.cocktailListViewModel = viewModel
@@ -51,9 +48,21 @@ class MainFragment : Fragment() {
         })
 
         viewModel.navigateToSelectedDrink.observe(viewLifecycleOwner, Observer {
-            if(it != null){
+            if(it != null) {
                 this.findNavController().navigate(MainFragmentDirections.actionNavHomeToCocktailDetailsFragment(it))
                 viewModel.displayCocktailDetailsComplete()
+            }
+        })
+
+        binding.searchButton.setOnClickListener {
+            viewModel.getCocktailByName(searchEditText.text.toString())
+            adapter.submitList(viewModel.cocktailListByGivenName.value)
+        }
+
+        viewModel.showClearedSnackBar.observe(viewLifecycleOwner, Observer {
+            if(it){
+                Snackbar.make(requireActivity().findViewById(android.R.id.content), getString(R.string.cleared_message), Snackbar.LENGTH_SHORT).show()
+                viewModel.showClearedSnackBarComplete()
             }
         })
 
