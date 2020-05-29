@@ -21,7 +21,7 @@ class CocktailListViewModel(cocktailTypeParameter : String) : ViewModel() {
     private val _cocktailListByGivenName = MutableLiveData<List<Cocktail>>()
     val cocktailListByGivenName: LiveData<List<Cocktail>> get() = _cocktailListByGivenName
 
-    private var cocktailListByGivenNameList = mutableListOf<Cocktail>()
+    private var cocktailListByGivenNameAux = mutableListOf<Cocktail>()
 
     private val _navigateToSelectedDrink = MutableLiveData<String>()
     val navigateToSelectedDrink: LiveData<String> get() = _navigateToSelectedDrink
@@ -79,22 +79,22 @@ class CocktailListViewModel(cocktailTypeParameter : String) : ViewModel() {
     }
 
     fun getCocktailByName(name : String) {
-        cocktailListByGivenNameList = mutableListOf<Cocktail>()
-        if (_cocktailList != null && !name.isNullOrEmpty() || !name.isBlank()) {
+        cocktailListByGivenNameAux = mutableListOf<Cocktail>()
+        if (!name.isBlank()) {
             var i = 0
             while (i < _cocktailList.value!!.size) {
                 val currentCocktail = _cocktailList.value!![i]
                 if(currentCocktail.cocktailName.contains(name, true)) {
-                    cocktailListByGivenNameList.add(currentCocktail)
+                    cocktailListByGivenNameAux.add(currentCocktail)
                 }
                 i++
             }
-            if(cocktailListByGivenNameList.isEmpty()) {
+            if(cocktailListByGivenNameAux.isEmpty()) {
                 _showClearedSnackBar.value = true
             }
-            _cocktailListByGivenName.value = cocktailListByGivenNameList
-        } else if (name.isBlank() || name.isEmpty() && originalCocktailListSize != cocktailListByGivenNameList.size) {
-            cocktailListByGivenNameList = mutableListOf<Cocktail>()
+            _cocktailListByGivenName.value = cocktailListByGivenNameAux
+        } else if (name.isBlank() || name.isEmpty() && originalCocktailListSize != cocktailListByGivenNameAux.size) {
+            cocktailListByGivenNameAux = mutableListOf<Cocktail>()
             _cocktailList.value?.let {
                 //To show the original list again without calling the endpoint
                 _cocktailListByGivenName.value = it

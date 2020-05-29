@@ -3,9 +3,13 @@ package com.example.cocktailapp
 import android.annotation.SuppressLint
 import android.content.Context.*
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -52,16 +56,24 @@ class MainFragment : Fragment() {
 
         viewModel.navigateToSelectedDrink.observe(viewLifecycleOwner, Observer {
             if(it != null) {
+                hideTheKeyboard()
                 this.findNavController().navigate(MainFragmentDirections.actionNavHomeToCocktailDetailsFragment(it))
                 viewModel.displayCocktailDetailsComplete()
             }
         })
 
+        binding.searchEditText.addTextChangedListener ( object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                searchCocktailByNameAndUpdateList(viewModel, adapter)
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+
+        } )
+
         binding.searchButton.setOnClickListener {
-            val imm = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view?.windowToken, 0)
-            viewModel.getCocktailByName(searchEditText.text.toString())
-            adapter.submitList(viewModel.cocktailListByGivenName.value)
+            hideTheKeyboard()
+            searchCocktailByNameAndUpdateList(viewModel, adapter)
         }
 
         viewModel.showClearedSnackBar.observe(viewLifecycleOwner, Observer {
@@ -76,6 +88,17 @@ class MainFragment : Fragment() {
 
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    private fun searchCocktailByNameAndUpdateList(viewModel: CocktailListViewModel, adapter: CocktailAdapter) {
+        viewModel.getCocktailByName(searchEditText.text.toString())
+        adapter.submitList(viewModel.cocktailListByGivenName.value)
+    }
+
+    private fun hideTheKeyboard() {
+        val imm = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        if (imm.isActive)
+            imm.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
     override fun onResume() {
