@@ -103,7 +103,7 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/drink_name"
                 android:textStyle="bold"
-                app:apiStatusTV="@{cocktailDetailsVieModel.status}"
+                app:apiStatusView="@{cocktailDetailsVieModel.status}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cocktail_details_image" />
 
@@ -116,7 +116,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="@string/detailPriceTV"
                 android:textStyle="bold"
-                app:apiStatusTV="@{cocktailDetailsVieModel.status}"
+                app:apiStatusView="@{cocktailDetailsVieModel.status}"
                 app:layout_constraintEnd_toStartOf="@+id/cocktail_details_price"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detailsName" />
@@ -130,7 +130,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="@string/detailGlassTypeTV"
                 android:textStyle="bold"
-                app:apiStatusTV="@{cocktailDetailsVieModel.status}"
+                app:apiStatusView="@{cocktailDetailsVieModel.status}"
                 app:layout_constraintEnd_toStartOf="@+id/cocktail_details_glass"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detailPriceTV" />
@@ -144,7 +144,7 @@
                 android:text="@string/detailsInstructionsTV"
                 android:textAlignment="center"
                 android:textStyle="bold"
-                app:apiStatusTV="@{cocktailDetailsVieModel.status}"
+                app:apiStatusView="@{cocktailDetailsVieModel.status}"
                 app:layout_constraintStart_toStartOf="@+id/detailsTypeGlassTV"
                 app:layout_constraintTop_toBottomOf="@+id/detailsTypeGlassTV" />
 
@@ -155,7 +155,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/ingredientsTV"
                 android:textStyle="bold"
-                app:apiStatusTV="@{cocktailDetailsVieModel.status}"
+                app:apiStatusView="@{cocktailDetailsVieModel.status}"
                 app:layout_constraintStart_toStartOf="@+id/cocktail_details_instructions"
                 app:layout_constraintTop_toBottomOf="@id/cocktail_details_instructions" />
 
@@ -181,7 +181,7 @@
                 app:layout_constraintHorizontal_bias="0.476"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.608">
+                app:layout_constraintVertical_bias="0.775">
 
                 <ImageView
                     android:id="@+id/noConnectionImg"

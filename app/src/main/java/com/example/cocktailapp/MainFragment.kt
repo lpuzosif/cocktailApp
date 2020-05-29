@@ -1,8 +1,11 @@
 package com.example.cocktailapp
 
 import android.annotation.SuppressLint
+import android.content.Context.*
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -55,6 +58,8 @@ class MainFragment : Fragment() {
         })
 
         binding.searchButton.setOnClickListener {
+            val imm = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view?.windowToken, 0)
             viewModel.getCocktailByName(searchEditText.text.toString())
             adapter.submitList(viewModel.cocktailListByGivenName.value)
         }
@@ -71,6 +76,11 @@ class MainFragment : Fragment() {
 
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        searchEditText.text.clear()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

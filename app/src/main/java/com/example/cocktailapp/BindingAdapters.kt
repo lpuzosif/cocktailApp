@@ -51,13 +51,15 @@ fun showApiStatusImage(linearLayoutView : LinearLayout, apiStatus : CocktailApiS
     }
 }
 
-@BindingAdapter("apiStatusTV")
-fun hideTVifAiStatus(statusTextView : TextView, apiStatus : CocktailApiStatus?) {
+@BindingAdapter("apiStatusView")
+fun showApiStatusView(view : View, apiStatus : CocktailApiStatus?) {
     when(apiStatus){
-        CocktailApiStatus.LOADING -> statusTextView.visibility = View.INVISIBLE
-
-        CocktailApiStatus.ERROR -> statusTextView.visibility = View.INVISIBLE
-
-        CocktailApiStatus.DONE -> statusTextView.visibility = View.VISIBLE
+        CocktailApiStatus.LOADING -> {
+            view.visibility = View.GONE
+        }
+        CocktailApiStatus.ERROR -> {
+            view.visibility = View.GONE
+        }
+        CocktailApiStatus.DONE -> view.visibility = View.VISIBLE
     }
 }

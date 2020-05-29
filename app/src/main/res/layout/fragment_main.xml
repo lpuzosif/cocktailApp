@@ -23,7 +23,8 @@
             android:inputType="text"
             app:layout_constraintEnd_toStartOf="@+id/searchButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:apiStatusView="@{cocktailListViewModel.status}" />
 
         <Button
             android:id="@+id/searchButton"
@@ -35,7 +36,8 @@
             android:text="@android:string/search_go"
             app:layout_constraintBottom_toBottomOf="@+id/searchEditText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/searchEditText" />
+            app:layout_constraintTop_toTopOf="@+id/searchEditText"
+            app:apiStatusView="@{cocktailListViewModel.status}" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cocktail_recycleView"
