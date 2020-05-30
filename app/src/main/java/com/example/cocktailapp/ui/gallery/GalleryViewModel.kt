@@ -51,12 +51,10 @@ class GalleryViewModel(cocktailTypeParameter : String) : ViewModel() {
                 _status.value = CocktailApiStatus.DONE
                 if (resultList.getDrinks()?.size!! > 0){
                     _cocktailList.value = resultList.getDrinks() as List<Cocktail>?
-                    Log.d("lilian", resultList.toString())
                 }
             }catch (e : Exception){
                 _status.value = CocktailApiStatus.ERROR
                 Log.d("lilian", "ERROR getCocktailListResponse " + e.message)
-                //si quito el if pongo _propertyList.value = ArrayList()
             }
         }
     }

@@ -53,9 +53,6 @@
         <argument
             android:name="cocktailIdArg"
             app:argType="string" />
-        <action
-            android:id="@+id/action_cocktailDetailsFragment_to_settingsActivity"
-            app:destination="@id/settingsActivity" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment2"

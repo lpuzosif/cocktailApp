@@ -86,7 +86,8 @@ class MainFragment : Fragment() {
 
         binding.searchButton.setOnClickListener {
             hideTheKeyboard()
-            searchCocktailByNameAndUpdateList(viewModel, adapter)
+            viewModel.getCocktailByNameWhenButtonIsPressed(searchEditText.text.toString())
+            adapter.submitList(viewModel.cocktailListByGivenName.value)
         }
 
         viewModel.showClearedSnackBar.observe(viewLifecycleOwner, Observer {
@@ -101,11 +102,6 @@ class MainFragment : Fragment() {
 
         setHasOptionsMenu(true)
         return binding.root
-    }
-
-    private fun searchCocktailByNameAndUpdateList(viewModel: CocktailListViewModel, adapter: CocktailAdapter) {
-        viewModel.getCocktailByNameWhenButtonIsPressed(searchEditText.text.toString())
-        adapter.submitList(viewModel.cocktailListByGivenName.value)
     }
 
     private fun hideTheKeyboard() {

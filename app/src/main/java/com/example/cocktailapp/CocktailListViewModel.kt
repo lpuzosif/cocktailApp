@@ -95,20 +95,16 @@ class CocktailListViewModel(cocktailTypeParameter : String) : ViewModel() {
     private fun searchByCocktailNameInCurrentResponse(name: String) {
         cocktailListByGivenNameAux = mutableListOf<Cocktail>()
         if (!name.isBlank()) {
-            var i = 0
-            while (i < _cocktailList.value!!.size) {
-                val currentCocktail = _cocktailList.value!![i]
-                if (currentCocktail.cocktailName.contains(name, true)) {
-                    cocktailListByGivenNameAux.add(currentCocktail)
-                }
-                i++
+            _cocktailList.value?.filter {
+                it.cocktailName.contains(name, true)
+            }?.let {
+                cocktailListByGivenNameAux.addAll(it)
             }
             if (cocktailListByGivenNameAux.isEmpty()) {
                 _showClearedSnackBar.value = true
             }
             _cocktailListByGivenName.value = cocktailListByGivenNameAux
         } else if (name.isBlank() || name.isEmpty() && originalCocktailListSize != cocktailListByGivenNameAux.size) {
-            cocktailListByGivenNameAux = mutableListOf<Cocktail>()
             _cocktailList.value?.let {
                 //To show the original list again without calling the endpoint
                 _cocktailListByGivenName.value = it
