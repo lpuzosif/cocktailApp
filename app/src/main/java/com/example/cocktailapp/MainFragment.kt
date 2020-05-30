@@ -5,11 +5,9 @@ import android.content.Context.*
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +19,8 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment() {
+
+    private lateinit var viewModel: CocktailListViewModel
 
     @SuppressLint("RestrictedApi")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -35,8 +35,7 @@ class MainFragment : Fragment() {
             getString(R.string.pref_Cocktail_value))!!
 
         val viewModelFactory = CocktailListViewModelFactory(cocktailTypeSetting)
-        val viewModel: CocktailListViewModel =
-            ViewModelProvider(this, viewModelFactory).get(CocktailListViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(CocktailListViewModel::class.java)
 
         // Giving the binding access to the View Model
         binding.cocktailListViewModel = viewModel
@@ -62,9 +61,23 @@ class MainFragment : Fragment() {
             }
         })
 
+        viewModel.word.observe(viewLifecycleOwner, Observer { newWord ->
+            if(newWord.isNotEmpty()) {
+                binding.searchEditText.setText(newWord)
+            }
+        })
+
+        // Fill the List with the given name
+        viewModel.cocktailListByGivenName.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.submitList(it)
+            }
+        })
+
         binding.searchEditText.addTextChangedListener ( object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                searchCocktailByNameAndUpdateList(viewModel, adapter)
+                viewModel.getCocktailByNameWhenUsersTypes(searchEditText.text.toString())
+                adapter.submitList(viewModel.cocktailListByGivenName.value)
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
@@ -91,7 +104,7 @@ class MainFragment : Fragment() {
     }
 
     private fun searchCocktailByNameAndUpdateList(viewModel: CocktailListViewModel, adapter: CocktailAdapter) {
-        viewModel.getCocktailByName(searchEditText.text.toString())
+        viewModel.getCocktailByNameWhenButtonIsPressed(searchEditText.text.toString())
         adapter.submitList(viewModel.cocktailListByGivenName.value)
     }
 
@@ -99,11 +112,6 @@ class MainFragment : Fragment() {
         val imm = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         if (imm.isActive)
             imm.hideSoftInputFromWindow(view?.windowToken, 0)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        searchEditText.text.clear()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

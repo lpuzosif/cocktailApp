@@ -34,6 +34,10 @@ class CocktailListViewModel(cocktailTypeParameter : String) : ViewModel() {
     private val _showClearedSnackBar = MutableLiveData<Boolean>()
     val showClearedSnackBar : LiveData<Boolean> get() = _showClearedSnackBar
 
+    // The current word on the search editText
+    private val _word = MutableLiveData<String>()
+    val word : LiveData<String> get() = _word
+
     fun showClearedSnackBarComplete() {
         _showClearedSnackBar.value = false
     }
@@ -78,18 +82,28 @@ class CocktailListViewModel(cocktailTypeParameter : String) : ViewModel() {
         _navigateToSelectedDrink.value = null
     }
 
-    fun getCocktailByName(name : String) {
+    fun getCocktailByNameWhenButtonIsPressed(name : String) {
+        _word.value = name
+        searchByCocktailNameInCurrentResponse(name)
+    }
+
+    fun getCocktailByNameWhenUsersTypes(name : String) {
+        _word.value = ""
+        searchByCocktailNameInCurrentResponse(name)
+    }
+
+    private fun searchByCocktailNameInCurrentResponse(name: String) {
         cocktailListByGivenNameAux = mutableListOf<Cocktail>()
         if (!name.isBlank()) {
             var i = 0
             while (i < _cocktailList.value!!.size) {
                 val currentCocktail = _cocktailList.value!![i]
-                if(currentCocktail.cocktailName.contains(name, true)) {
+                if (currentCocktail.cocktailName.contains(name, true)) {
                     cocktailListByGivenNameAux.add(currentCocktail)
                 }
                 i++
             }
-            if(cocktailListByGivenNameAux.isEmpty()) {
+            if (cocktailListByGivenNameAux.isEmpty()) {
                 _showClearedSnackBar.value = true
             }
             _cocktailListByGivenName.value = cocktailListByGivenNameAux
