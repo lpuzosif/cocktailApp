@@ -12,12 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.cocktailapp.R
 import com.example.cocktailapp.databinding.CocktailDetailBinding
+import com.example.cocktailapp.db.CocktailDatabase
+import com.example.cocktailapp.repository.CocktailRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CocktailDetailsFragment : Fragment(){
 
     /**
-     * Inflates the layout with Data Binding, sets its lifecycle owner to the OverviewFragment
+     * Inflates the layout with Data Binding, sets its lifecycle owner to the CocktailDetailsFragment
      * to enable Data Binding to observe LiveData, and sets up the RecyclerView with an adapter.
      */
     @SuppressLint("RestrictedApi")
@@ -32,7 +34,8 @@ class CocktailDetailsFragment : Fragment(){
 
         val cocktailId = CocktailDetailsFragmentArgs.fromBundle(requireArguments()).cocktailIdArg
 
-        val viewModelFactory = CocktailDetailsViewModelFactory(cocktailId, application)
+        val cocktailRepository = CocktailRepository(CocktailDatabase(requireActivity()))
+        val viewModelFactory = CocktailDetailsViewModelFactory(cocktailId, application, cocktailRepository)
         val viewModel: CocktailDetailsViewModel =
             ViewModelProvider(this, viewModelFactory).get(CocktailDetailsViewModel::class.java)
 

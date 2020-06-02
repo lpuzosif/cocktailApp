@@ -10,10 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.example.cocktailapp.R
 import com.example.cocktailapp.databinding.FragmentGalleryBinding
+import com.example.cocktailapp.ui.adapters.GalleryAdapter
 
 class GalleryFragment : Fragment() {
-
-    private lateinit var galleryViewModel: GalleryViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

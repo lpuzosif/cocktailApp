@@ -1,4 +1,4 @@
-package com.example.cocktailapp.ui.gallery
+package com.example.cocktailapp.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,12 +6,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cocktailapp.databinding.CocktailPhotoItemViewBinding
-import com.example.cocktailapp.service.Cocktail
+import com.example.cocktailapp.models.Cocktail
 
 class GalleryAdapter : ListAdapter<Cocktail, GalleryAdapter.ViewHolder>(CocktailDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.from(parent)
+        return ViewHolder.from(
+            parent
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

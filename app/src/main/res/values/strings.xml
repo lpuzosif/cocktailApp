@@ -10,15 +10,15 @@
     <!--Used by Nav Drawer  -->
     <string name="menu_home">Cocktails</string>
     <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_favorites">Favorites</string>
 
     <!--Main fragment name  -->
     <string name="home_cocktailList">Cocktail List</string>
+    <string name="clear_button">Clear</string>
 
     <!--Used by blind people  -->
     <string name="cocktail_details_image_content_descrip">Cocktail Details Image</string>
     <string name="no_connection_image">no Connection Image</string>
-    <string name="check_your_internet_connection">Check your internet connection, the API call has fail</string>
     <string name="image_grid_description">Cokctail Image in Grid View</string>
     <string name="listView_image_content_descrip">Cocktail Image in List View</string>
 
@@ -58,5 +58,10 @@
     <string name="pref_Cocoa_value">Cocoa</string>
     <string name="search_by_cocktail_name">Search by cocktail name</string>
     <string name="cleared_message">There are no cocktails matching your input</string>
+
+    <!-- Values to check internet connection and api call status -->
+    <string name="check_your_internet_connection">Check your internet connection, the API call has fail</string>
+    <string name="check_internet">Check you internet connection</string>
+    <string name="api_call_failed">The API call has failed</string>
 
 </resources>

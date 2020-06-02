@@ -4,8 +4,11 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.cocktailapp.R
-import com.example.cocktailapp.service.Cocktail
-import com.example.cocktailapp.service.CocktailApi
+import com.example.cocktailapp.models.Cocktail
+import com.example.cocktailapp.api.CocktailApi
+import com.example.cocktailapp.repository.CocktailRepository
+import com.example.cocktailapp.ui.InternetConnection
+import com.example.cocktailapp.util.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -14,7 +17,7 @@ import java.lang.Exception
 
 enum class CocktailApiStatus { LOADING, ERROR, DONE }
 
-class CocktailDetailsViewModel(private var drinkId: String, app: Application) : AndroidViewModel(app) {
+class CocktailDetailsViewModel(private var drinkId: String, app: Application, private val repository: CocktailRepository) : AndroidViewModel(app) {
 
     private val _cocktail = MutableLiveData<Cocktail>()
     val cocktail: LiveData<Cocktail> get() = _cocktail
@@ -23,6 +26,11 @@ class CocktailDetailsViewModel(private var drinkId: String, app: Application) : 
     private val _status = MutableLiveData<CocktailApiStatus>()
     // The external immutable LiveData for the request status String
     val status: LiveData<CocktailApiStatus> get() = _status
+
+    // The internal MutableLiveData String that stores the internet device status
+    private val _internetStatus = MutableLiveData<InternetConnection>()
+    // The external immutable LiveData for the internet device status
+    val internetStatus: LiveData<InternetConnection> get() = _internetStatus
 
     private val viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -77,30 +85,32 @@ class CocktailDetailsViewModel(private var drinkId: String, app: Application) : 
     }
 
     private fun getCocktailResponse() {
-
-        coroutineScope.launch {
-            //This list only have 1 element
-            val getCocktailListDeferred =
-                CocktailApi.retrofitService.getCocktailDetailsAsync(drinkId)
-            try {
-                _status.value = CocktailApiStatus.LOADING
-                val cocktailResult = getCocktailListDeferred.await()
-                _status.value = CocktailApiStatus.DONE
-                if (cocktailResult.getDrinks()?.size!! > 0) {
-                    _cocktail.value = cocktailResult.getDrinks()!![0]
+        if (Utils.hasInternetConnection()) {
+            _internetStatus.value = InternetConnection.HAS_INTERNET_CONNECTION
+            coroutineScope.launch {
+                //This list only have 1 element
+                try {
+                    _status.value = CocktailApiStatus.LOADING
+                    val cocktailResult = repository.getCocktailDetails(drinkId)
+                    _status.value = CocktailApiStatus.DONE
+                    if (cocktailResult.drinks?.size!! > 0) {
+                        _cocktail.value = cocktailResult.drinks!!.toList()[0]
+                    }
+                } catch (e: Exception) {
+                    _status.value = CocktailApiStatus.ERROR
+                    Log.d("lilian", "ERROR getCocktailResponse in VM " + e.message)
                 }
-            } catch (e: Exception) {
-                _status.value = CocktailApiStatus.ERROR
-                Log.d("lilian", "ERROR getCocktailResponse in VM " + e.message)
             }
+        } else {
+                _internetStatus.value = InternetConnection.NO_INTERNET_CONNECTION
         }
     }
 
     //To send the email
     fun getCocktailDetailsString(): String {
-        return "Cocktail Name: " + cocktail.value!!.cocktailName + "\n" +
-                "Glass Type: " + cocktail.value!!.cocktailGlass + "\n" +
-                "Cocktail Instructions: " + cocktail.value!!.cocktailInstructions + "\n" +
+        return "Cocktail Name: " + cocktail.value!!.cocktailName +
+                "\nGlass Type: " + cocktail.value!!.cocktailGlass +
+                "\nCocktail Instructions: " + cocktail.value!!.cocktailInstructions + "\n" +
                 "Last day were instructions were modified for this Cocktail: " + cocktail.value!!.cocktailDateModified
     }
 

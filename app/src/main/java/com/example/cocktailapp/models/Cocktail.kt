@@ -1,9 +1,16 @@
-package com.example.cocktailapp.service
+package com.example.cocktailapp.models
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 import com.squareup.moshi.Json
+import java.io.Serializable
 
-class Cocktail (
+@Entity(tableName = "cocktails")
+data class Cocktail (
+    @PrimaryKey(autoGenerate = true)
+    var id: Int? = null,
     @Json(name = "strDrink") val cocktailName : String,
     @Json(name="strDrinkThumb") val cocktailImgSrcUrl : String,
     @Json(name="idDrink") val cocktailPrice : String,
@@ -20,7 +27,7 @@ class Cocktail (
     @Json(name="strMeasure4") val cocktailMeasure4 : String?,
     @Json(name="strMeasure5") val cocktailMeasure5 : String?,
     @Json(name="dateModified") val cocktailDateModified : String?
-) {
+) : Serializable {
     val haveFirstMeasure get() = !cocktailMeasure1.isNullOrEmpty()
     val haveSecondIngredient get() = !cocktailIngredient2.isNullOrEmpty()
     val haveSecondMeasure get() = !cocktailMeasure2.isNullOrEmpty()

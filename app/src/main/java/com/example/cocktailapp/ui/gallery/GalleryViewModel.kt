@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.cocktailapp.service.Cocktail
-import com.example.cocktailapp.service.CocktailApi
+import com.example.cocktailapp.models.Cocktail
+import com.example.cocktailapp.api.CocktailApi
 import com.example.cocktailapp.ui.cocktailDetails.CocktailApiStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,15 +42,15 @@ class GalleryViewModel(cocktailTypeParameter : String) : ViewModel() {
     }
 
     private fun getCocktailListResponse(cocktailTypeParam : String) {
-
+        //TODO("Check internet connection, this is just to fake the api call failing")
         coroutineScope.launch {
             val getCocktailListDeferred = CocktailApi.retrofitService.getCocktailListAsync(cocktailTypeParam)
             try {
                 _status.value = CocktailApiStatus.LOADING
                 val resultList = getCocktailListDeferred.await()
                 _status.value = CocktailApiStatus.DONE
-                if (resultList.getDrinks()?.size!! > 0){
-                    _cocktailList.value = resultList.getDrinks() as List<Cocktail>?
+                if (resultList.drinks?.size!! > 0){
+                    _cocktailList.value = resultList.drinks as List<Cocktail>?
                 }
             }catch (e : Exception){
                 _status.value = CocktailApiStatus.ERROR

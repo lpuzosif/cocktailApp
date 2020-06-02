@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.cocktailapp.MainFragment"
+        android:name="com.example.cocktailapp.ui.MainFragment"
         android:label="@string/home_cocktailList"
         tools:layout="@layout/fragment_main">
         <action
@@ -41,10 +41,11 @@
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.cocktailapp.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_favorites"
+        android:name="com.example.cocktailapp.ui.favorites.FavoritesFragment"
+        android:label="@string/menu_favorites"
+        tools:layout="@layout/fragment_favorites" />
+
     <fragment
         android:id="@+id/cocktailDetailsFragment"
         android:name="com.example.cocktailapp.ui.cocktailDetails.CocktailDetailsFragment"
@@ -54,13 +55,16 @@
             android:name="cocktailIdArg"
             app:argType="string" />
     </fragment>
+
     <fragment
         android:id="@+id/settingsFragment2"
         android:name="com.example.cocktailapp.ui.settings.SettingsFragment"
         android:label="SettingsFragment" />
+
     <activity
         android:id="@+id/settingsActivity"
         android:name="com.example.cocktailapp.ui.settings.SettingsActivity"
         android:label="SettingsActivity"
         tools:layout="@layout/activity_settings"/>
+
 </navigation>
