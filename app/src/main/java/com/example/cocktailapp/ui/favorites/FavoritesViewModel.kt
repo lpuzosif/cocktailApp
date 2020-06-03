@@ -1,13 +1,48 @@
 package com.example.cocktailapp.ui.favorites
 
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.cocktailapp.models.Cocktail
+import com.example.cocktailapp.repository.CocktailRepository
+import com.example.cocktailapp.ui.InternetConnection
+import com.example.cocktailapp.util.Utils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-class FavoritesViewModel : ViewModel() {
+class FavoritesViewModel(app: Application, val repository: CocktailRepository) : AndroidViewModel(app) {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is favorite Fragment"
+    var cocktailList = repository.getCocktailsFromDB()
+
+    private val _navigateToSelectedDrink = MutableLiveData<String>()
+    val navigateToSelectedDrink: LiveData<String> get() = _navigateToSelectedDrink
+
+    private val viewModelJob = Job()
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+    fun displayCocktailDetails(drinkId: String) {
+        _navigateToSelectedDrink.value = drinkId
     }
-    val text: LiveData<String> = _text
+
+    fun displayCocktailDetailsComplete() {
+        _navigateToSelectedDrink.value = null
+    }
+
+    fun deleteCocktail(cocktail: Cocktail) = viewModelScope.launch {
+        repository.delete(cocktail)
+    }
+
+    fun saveDeletedCocktail(cocktail: Cocktail) = viewModelScope.launch {
+        repository.upsert(cocktail)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+    }
 }

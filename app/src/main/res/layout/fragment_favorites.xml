@@ -1,23 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.favorites.FavoritesFragment" >
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/text_slideshow"
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.cocktailapp.ui.favorites.FavoritesViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/eightDp_margin"
-        android:layout_marginTop="@dimen/eightDp_margin"
-        android:layout_marginEnd="@dimen/eightDp_margin"
-        android:textAlignment="center"
-        android:textSize="@dimen/twentySp_test"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"
+        tools:context=".ui.favorites.FavoritesFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cocktails_favorites_recycleView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/eightDp_margin"
+            android:layout_marginTop="@dimen/fourDp_margin"
+            android:layout_marginEnd="@dimen/eightDp_margin"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/cocktail_item_view" />
+
+        <TextView
+            android:id="@+id/favoritesTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:text="@string/favorite_cocktailList_empty"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/twentySp_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- <include layout="@layout/connection_view" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -6,12 +6,14 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.cocktailapp.R
 import com.example.cocktailapp.databinding.FragmentMainBinding
 import com.example.cocktailapp.db.CocktailDatabase
@@ -32,8 +34,7 @@ class MainFragment : Fragment() {
     private lateinit var viewModel: CocktailListViewModel
 
     @SuppressLint("RestrictedApi")
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentMainBinding.inflate(inflater)
 
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
@@ -46,12 +47,7 @@ class MainFragment : Fragment() {
             getString(R.string.pref_Cocktail_value))!!
 
         val cocktailRepository = CocktailRepository(CocktailDatabase(requireActivity()))
-        val viewModelFactory =
-            CocktailListViewModelFactory(
-                cocktailTypeSetting,
-                app = requireActivity().application,
-                repository = cocktailRepository
-            )
+        val viewModelFactory = CocktailListViewModelFactory(cocktailTypeSetting, app = requireActivity().application, repository = cocktailRepository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(CocktailListViewModel::class.java)
 
         // Giving the binding access to the View Model
@@ -70,14 +66,15 @@ class MainFragment : Fragment() {
             }
         })
 
+        // Add dividers between RecyclerView's row items
+        val decoration = DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL)
+        binding.cocktailRecycleView.addItemDecoration(decoration)
+
         viewModel.navigateToSelectedDrink.observe(viewLifecycleOwner, Observer {
             if(it != null) {
                 hideTheKeyboard()
-                this.findNavController().navigate(
-                    MainFragmentDirections.actionNavHomeToCocktailDetailsFragment(
-                        it
-                    )
-                )
+                val bundle = bundleOf( "drinkId" to it)
+                this.findNavController().navigate(R.id.action_nav_home_to_cocktailDetailsFragment, bundle)
                 viewModel.displayCocktailDetailsComplete()
             }
         })
@@ -109,7 +106,7 @@ class MainFragment : Fragment() {
         binding.searchEditText.addTextChangedListener { editable ->
             job?.cancel()
             job = MainScope().launch {
-                delay(Constants.SEARCH_NEWS_TIME_DELAY)
+                delay(Constants.SEARCH_TIME_DELAY)
                 editable?.let {
                     if(editable.toString().isNotEmpty()) {
                         viewModel.getCocktailByNameWhenUsersTypes(editable.toString())
@@ -118,25 +115,19 @@ class MainFragment : Fragment() {
                 }
             }
         }
-        //addTextChangeListener(binding, adapter)
 
         binding.clearButton.setOnClickListener {
             hideTheKeyboard()
             binding.searchEditText.setText("")
             viewModel.getCocktailByNameWhenUsersTypes("")
         }
-//        binding.searchButton.setOnClickListener {
-//            hideTheKeyboard()
-//            viewModel.getCocktailByNameWhenButtonIsPressed(searchEditText.text.toString())
-//            adapter.submitList(viewModel.cocktailListByGivenName.value)
-//        }
 
         viewModel.showClearedSnackBar.observe(viewLifecycleOwner, Observer {
             if (it) {
-                //Snackbar.make(requireActivity().findViewById(android.R.id.content), getString(R.string.cleared_message), Snackbar.LENGTH_SHORT).show()
-                val snb = Snackbar.make(requireActivity().findViewById(R.id.searchEditText), getString(R.string.cleared_message), Snackbar.LENGTH_SHORT)
-                snb.view.setBackgroundColor(Color.BLUE)
-                snb.show()
+                Snackbar.make(requireActivity().findViewById(R.id.searchEditText), getString(R.string.cleared_message), Snackbar.LENGTH_SHORT).apply {
+                    view.setBackgroundColor(Color.BLUE)
+                    show()
+                }
                 viewModel.showClearedSnackBarComplete()
             }
         })
@@ -151,6 +142,7 @@ class MainFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.main, menu)
+        menu.removeItem(R.id.action_favorite)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -166,34 +158,4 @@ class MainFragment : Fragment() {
         super.onPause()
         hideTheKeyboard()
     }
-
-//    private fun addTextChangeListener(binding: FragmentMainBinding, adapter: CocktailAdapter) {
-//        binding.searchEditText.addTextChangedListener(object : TextWatcher {
-//            override fun afterTextChanged(s: Editable?) {
-//                viewModel.getCocktailByNameWhenUsersTypes(searchEditText.text.toString())
-//                adapter.submitList(viewModel.cocktailListByGivenName.value)
-//            }
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//
-//        })
-//    }
 }
-
-
-
-//        viewModel.drinksList.observe(viewLifecycleOwner, Observer { response ->
-//            when(response) {
-//                is Resource.Success -> {
-//                    response.data?.let { drinksResponse ->
-//                        Toast.makeText(activity, "entro al data no vacio", Toast.LENGTH_LONG).show()
-//                        adapter.submitList(drinksResponse.drinks?.toList())
-//                    }
-//                }
-//                is Resource.Error -> {
-//                    response.message?.let { message ->
-//                        Toast.makeText(activity, "An error occurred: $message", Toast.LENGTH_LONG).show()
-//                    }
-//                }
-//            }
-//        })

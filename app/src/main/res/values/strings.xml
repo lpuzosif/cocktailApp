@@ -5,21 +5,33 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">lilian@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
-    <!--Used by Nav Drawer  -->
+    <!--Used by Menu -->
+    <string name="action_settings">Settings</string>
+    <string name="action_favorite">Favorite</string>
+
+    <!--Used by Nav Drawer -->
     <string name="menu_home">Cocktails</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_favorites">Favorites</string>
 
-    <!--Main fragment name  -->
+    <!--Main fragment -->
     <string name="home_cocktailList">Cocktail List</string>
     <string name="clear_button">Clear</string>
+
+    <!--Details fragment -->
+    <string name="cocktail_saved_message">Cocktail saved in favorites</string>
+    <string name="cocktail_deleted_successfully_from_favorites">The cocktail was removed from favorites</string>
+    <string name="cocktail_already_saved_message">Cocktail is already saved in favorites</string>
+
+    <!--Favorite fragment -->
+    <string name="favorite_cocktailList_empty">You don´t have any drinks saved yet</string>
+    <string name="favorite_cocktail_deleted_successfully">The cocktail was deleted</string>
 
     <!--Used by blind people  -->
     <string name="cocktail_details_image_content_descrip">Cocktail Details Image</string>
     <string name="no_connection_image">no Connection Image</string>
-    <string name="image_grid_description">Cokctail Image in Grid View</string>
+    <string name="image_grid_description">Cocktail Image in Grid View</string>
     <string name="listView_image_content_descrip">Cocktail Image in List View</string>
 
     <!--Used by view Model  -->
@@ -58,6 +70,7 @@
     <string name="pref_Cocoa_value">Cocoa</string>
     <string name="search_by_cocktail_name">Search by cocktail name</string>
     <string name="cleared_message">There are no cocktails matching your input</string>
+    <!--Used by Preferences END -->
 
     <!-- Values to check internet connection and api call status -->
     <string name="check_your_internet_connection">Check your internet connection, the API call has fail</string>

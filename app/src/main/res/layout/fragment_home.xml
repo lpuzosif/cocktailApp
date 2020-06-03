@@ -15,7 +15,7 @@
         android:layout_marginTop="@dimen/eightDp_margin"
         android:layout_marginEnd="@dimen/eightDp_margin"
         android:textAlignment="center"
-        android:textSize="@dimen/twentySp_test"
+        android:textSize="@dimen/twentySp_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

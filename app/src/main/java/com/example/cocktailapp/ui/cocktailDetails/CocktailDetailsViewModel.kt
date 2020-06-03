@@ -5,19 +5,19 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.cocktailapp.R
 import com.example.cocktailapp.models.Cocktail
-import com.example.cocktailapp.api.CocktailApi
 import com.example.cocktailapp.repository.CocktailRepository
 import com.example.cocktailapp.ui.InternetConnection
 import com.example.cocktailapp.util.Utils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.lang.Exception
 
 enum class CocktailApiStatus { LOADING, ERROR, DONE }
 
-class CocktailDetailsViewModel(private var drinkId: String, app: Application, private val repository: CocktailRepository) : AndroidViewModel(app) {
+class CocktailDetailsViewModel(
+    private var drinkId: String,
+    app: Application,
+    private val repository: CocktailRepository
+) : AndroidViewModel(app) {
 
     private val _cocktail = MutableLiveData<Cocktail>()
     val cocktail: LiveData<Cocktail> get() = _cocktail
@@ -32,6 +32,12 @@ class CocktailDetailsViewModel(private var drinkId: String, app: Application, pr
     // The external immutable LiveData for the internet device status
     val internetStatus: LiveData<InternetConnection> get() = _internetStatus
 
+    private val _insertedToBDStatus = MutableLiveData<Boolean>()
+    val insertedToBDStatus: LiveData<Boolean> get() = _insertedToBDStatus
+
+    private val _deletedFromBDStatus = MutableLiveData<Boolean>()
+    val deletedFromBDStatus: LiveData<Boolean> get() = _deletedFromBDStatus
+
     private val viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
@@ -42,15 +48,15 @@ class CocktailDetailsViewModel(private var drinkId: String, app: Application, pr
         )
     }
 
-    private fun getPrice(cocktail: Cocktail) : String {
+    private fun getPrice(cocktail: Cocktail): String {
         val aux: String = cocktail.cocktailPrice.subSequence(0, 2).toString()
-        return  aux + "."  + cocktail.cocktailPrice.subSequence(2, 4)
+        return aux + "." + cocktail.cocktailPrice.subSequence(2, 4)
     }
 
     val dateFormatted = Transformations.map(cocktail) {
         app.applicationContext.getString(
             R.string.detailsDate,
-            when(it.cocktailDateModified != null) {
+            when (it.cocktailDateModified != null) {
                 true -> it.cocktailDateModified.substringBefore(" ")
                 else -> "Unknown"
             }
@@ -58,22 +64,54 @@ class CocktailDetailsViewModel(private var drinkId: String, app: Application, pr
     }
 
     val ingredientsAndMeasure = Transformations.map(cocktail) {
-        app.applicationContext.getString(R.string.measure_and_ingredient, it.cocktailIngredient1, when(it.haveFirstMeasure){ true -> ": " + it.cocktailMeasure1 else -> "" },
-            when(it.haveSecondIngredient){
-                true -> "\n" + app.applicationContext.getString(R.string.next_measure_and_ingredient, it.cocktailIngredient2, when(it.haveSecondMeasure){ true -> ": " + it.cocktailMeasure2 else -> "" })
+        app.applicationContext.getString(
+            R.string.measure_and_ingredient, it.cocktailIngredient1, when (it.haveFirstMeasure) {
+                true -> ": " + it.cocktailMeasure1
                 else -> ""
             },
-            when(it.haveThirdIngredient){
-                true -> "\n" + app.applicationContext.getString(R.string.next_measure_and_ingredient, it.cocktailIngredient3, when(it.haveThirdMeasure){ true -> ": " + it.cocktailMeasure3 else -> "" })
+            when (it.haveSecondIngredient) {
+                true -> "\n" + app.applicationContext.getString(
+                    R.string.next_measure_and_ingredient,
+                    it.cocktailIngredient2,
+                    when (it.haveSecondMeasure) {
+                        true -> ": " + it.cocktailMeasure2
+                        else -> ""
+                    }
+                )
+                else -> ""
+            },
+            when (it.haveThirdIngredient) {
+                true -> "\n" + app.applicationContext.getString(
+                    R.string.next_measure_and_ingredient,
+                    it.cocktailIngredient3,
+                    when (it.haveThirdMeasure) {
+                        true -> ": " + it.cocktailMeasure3
+                        else -> ""
+                    }
+                )
                 else -> ""
             }
             ,
-            when(it.haveFourthIngredient){
-                true -> "\n" + app.applicationContext.getString(R.string.next_measure_and_ingredient, it.cocktailIngredient4, when(it.haveFourthMeasure){ true -> ": " + it.cocktailMeasure4 else -> "" })
+            when (it.haveFourthIngredient) {
+                true -> "\n" + app.applicationContext.getString(
+                    R.string.next_measure_and_ingredient,
+                    it.cocktailIngredient4,
+                    when (it.haveFourthMeasure) {
+                        true -> ": " + it.cocktailMeasure4
+                        else -> ""
+                    }
+                )
                 else -> ""
             },
-            when(it.haveFiveIngredient){
-                true -> "\n" + app.applicationContext.getString(R.string.next_measure_and_ingredient, it.cocktailIngredient5, when(it.haveFiveMeasure){ true -> ": " + it.cocktailMeasure5 else -> "" })
+            when (it.haveFiveIngredient) {
+                true -> "\n" + app.applicationContext.getString(
+                    R.string.next_measure_and_ingredient,
+                    it.cocktailIngredient5,
+                    when (it.haveFiveMeasure) {
+                        true -> ": " + it.cocktailMeasure5
+                        else -> ""
+                    }
+                )
                 else -> ""
             }
         )
@@ -102,7 +140,7 @@ class CocktailDetailsViewModel(private var drinkId: String, app: Application, pr
                 }
             }
         } else {
-                _internetStatus.value = InternetConnection.NO_INTERNET_CONNECTION
+            _internetStatus.value = InternetConnection.NO_INTERNET_CONNECTION
         }
     }
 
@@ -112,6 +150,37 @@ class CocktailDetailsViewModel(private var drinkId: String, app: Application, pr
                 "\nGlass Type: " + cocktail.value!!.cocktailGlass +
                 "\nCocktail Instructions: " + cocktail.value!!.cocktailInstructions + "\n" +
                 "Last day were instructions were modified for this Cocktail: " + cocktail.value!!.cocktailDateModified
+    }
+
+    fun saveOrDeleteCocktailInFavorites() {
+        coroutineScope.launch {
+            val cocktailInDB = cocktailWasSaved(drinkId)
+            if (cocktailInDB == null) {
+                _cocktail.value?.let {
+                    repository.upsert(it)
+                    _insertedToBDStatus.value = true
+                }
+
+            } else {
+                _insertedToBDStatus.value = false
+                deleteFavoriteCocktailFromDB(cocktailInDB)
+            }
+        }
+    }
+
+    private suspend fun cocktailWasSaved(drinkId: String) : Cocktail? {
+        return withContext(Dispatchers.IO) {
+                repository.getCocktailById(drinkId)
+        }
+    }
+
+    private fun deleteFavoriteCocktailFromDB(cocktail: Cocktail) = viewModelScope.launch {
+        repository.delete(cocktail)
+        _deletedFromBDStatus.value = true
+    }
+
+    fun deletedFromBDMessageCompleted() {
+        _deletedFromBDStatus.value = false
     }
 
     override fun onCleared() {

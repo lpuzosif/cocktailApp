@@ -44,7 +44,11 @@
         android:id="@+id/nav_favorites"
         android:name="com.example.cocktailapp.ui.favorites.FavoritesFragment"
         android:label="@string/menu_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_nav_favorites_to_cocktailDetailsFragment"
+            app:destination="@id/cocktailDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/cocktailDetailsFragment"

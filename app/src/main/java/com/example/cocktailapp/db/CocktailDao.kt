@@ -13,6 +13,9 @@ interface CocktailDao {
     @Query("SELECT * FROM cocktails")
     fun getAllCocktails() : LiveData<List<Cocktail>>
 
+    @Query("SELECT * FROM cocktails WHERE cocktailPrice = :priceIsCocktailId")
+    suspend fun getCocktailById(priceIsCocktailId : String) : Cocktail?
+
     @Delete
     suspend fun delete(cocktail: Cocktail)
 }
