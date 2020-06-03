@@ -1,15 +1,12 @@
 package com.example.cocktailapp.ui.favorites
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.cocktailapp.models.Cocktail
 import com.example.cocktailapp.repository.CocktailRepository
-import com.example.cocktailapp.ui.InternetConnection
-import com.example.cocktailapp.util.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

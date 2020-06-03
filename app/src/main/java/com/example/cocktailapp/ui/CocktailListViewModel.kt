@@ -98,11 +98,6 @@ class CocktailListViewModel(
         _navigateToSelectedDrink.value = null
     }
 
-    fun getCocktailByNameWhenButtonIsPressed(name: String) {
-        _word.value = name
-        searchByCocktailNameInCurrentResponse(name)
-    }
-
     fun getCocktailByNameWhenUsersTypes(name: String) {
         _word.value = ""
         searchByCocktailNameInCurrentResponse(name)
@@ -133,36 +128,4 @@ class CocktailListViewModel(
         viewModelJob.cancel()
     }
 
-
-//    private val _drinksList : MutableLiveData<Resource<DrinksListResponse>> = MutableLiveData()
-//    val drinksList: MutableLiveData<Resource<DrinksListResponse>> get() = _drinksList
-//    private var drinksListResponse : DrinksListResponse? = null
-//
-//    private suspend fun safeCocktailCall(cocktailTypeParam: String) {
-//        //val getCocktailListDeferred = repository.getCocktails(cocktailTypeParam)
-//        try {
-//            _status.value = CocktailApiStatus.LOADING
-//            val resultList = repository.getCocktails(cocktailTypeParam)
-//            _status.value = CocktailApiStatus.DONE
-//            if (resultList.drinks?.size!! > 0){
-//                _cocktailList.value = resultList.drinks as List<Cocktail>?
-//            }
-//        } catch(t: Throwable) {
-//            _status.value = CocktailApiStatus.ERROR
-//            when(t) {
-//                is IOException -> _drinksList.postValue(Resource.Error("Network Failure"))
-//                else -> _drinksList.postValue(Resource.Error( "Something is wrong. Sorry for the inconveniences"))
-//            }
-//        }
-//    }
-//    private fun handleDrinksListResponse(response: Response<DrinksListResponse>) : Resource<DrinksListResponse> {
-//        if(response.isSuccessful) {
-//            response.body()?.let { resultResponse ->
-//                drinksListResponse = resultResponse
-//                _status.value = CocktailApiStatus.DONE
-//                return Resource.Success(drinksListResponse ?: resultResponse)
-//            }
-//        }
-//        return Resource.Error(response.message())
-//    }
 }

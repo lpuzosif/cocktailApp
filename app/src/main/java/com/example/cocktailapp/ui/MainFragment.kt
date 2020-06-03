@@ -28,7 +28,6 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
 class MainFragment : Fragment() {
 
     private lateinit var viewModel: CocktailListViewModel
