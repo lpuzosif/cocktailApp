@@ -107,10 +107,9 @@ class MainFragment : Fragment() {
             job = MainScope().launch {
                 delay(Constants.SEARCH_TIME_DELAY)
                 editable?.let {
-                    if(editable.toString().isNotEmpty()) {
-                        viewModel.getCocktailByNameWhenUsersTypes(editable.toString())
-                        adapter.submitList(viewModel.cocktailListByGivenName.value)
-                    }
+                    viewModel.getCocktailByNameWhenUsersTypes(editable.toString())
+                    adapter.submitList(viewModel.cocktailListByGivenName.value)
+
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.example.cocktailapp.api
 
 import com.example.cocktailapp.models.DrinksListResponse
+import com.example.cocktailapp.util.Constants
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -14,8 +15,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
-
-private const val BASE_URL = "https://the-cocktail-db.p.rapidapi.com/"
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -32,7 +31,7 @@ private val retrofit by lazy {
     Retrofit.Builder()
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .baseUrl(BASE_URL)
+        .baseUrl(Constants.BASE_URL)
         .client(client)
         .build()
 }

@@ -13,6 +13,8 @@ import java.lang.Exception
 
 enum class CocktailApiStatus { LOADING, ERROR, DONE }
 
+enum class ViewVisibilityStatus { VIEW_VISIBLE,  VIEW_INVISIBLE }
+
 class CocktailDetailsViewModel(
     private var drinkId: String,
     app: Application,
@@ -23,14 +25,17 @@ class CocktailDetailsViewModel(
     val cocktail: LiveData<Cocktail> get() = _cocktail
 
     // The internal MutableLiveData String that stores the status of the most recent request
-    private val _status = MutableLiveData<CocktailApiStatus>()
+    private val _apiStatus = MutableLiveData<CocktailApiStatus>()
     // The external immutable LiveData for the request status String
-    val status: LiveData<CocktailApiStatus> get() = _status
+    val loadingStatus: LiveData<CocktailApiStatus> get() = _apiStatus
 
     // The internal MutableLiveData String that stores the internet device status
     private val _internetStatus = MutableLiveData<InternetConnection>()
     // The external immutable LiveData for the internet device status
     val internetStatus: LiveData<InternetConnection> get() = _internetStatus
+
+    private val _viewVisibility = MutableLiveData<ViewVisibilityStatus>()
+    val viewVisibility: LiveData<ViewVisibilityStatus> get() = _viewVisibility
 
     private val _insertedToBDStatus = MutableLiveData<Boolean>()
     val insertedToBDStatus: LiveData<Boolean> get() = _insertedToBDStatus
@@ -42,29 +47,30 @@ class CocktailDetailsViewModel(
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     val priceFormatted = Transformations.map(cocktail) {
-        app.applicationContext.getString(
+        it?.let { app.applicationContext.getString(
             R.string.detailsPrice,
             getPrice(it)
-        )
+        )}
     }
 
     private fun getPrice(cocktail: Cocktail): String {
+        //I´m using the drink id as a price because the api does not not include this value
         val aux: String = cocktail.cocktailPrice.subSequence(0, 2).toString()
         return aux + "." + cocktail.cocktailPrice.subSequence(2, 4)
     }
 
     val dateFormatted = Transformations.map(cocktail) {
-        app.applicationContext.getString(
+        it?.let {  app.applicationContext.getString(
             R.string.detailsDate,
             when (it.cocktailDateModified != null) {
                 true -> it.cocktailDateModified.substringBefore(" ")
                 else -> "Unknown"
             }
-        )
+        )}
     }
 
     val ingredientsAndMeasure = Transformations.map(cocktail) {
-        app.applicationContext.getString(
+        it?.let { app.applicationContext.getString(
             R.string.measure_and_ingredient, it.cocktailIngredient1, when (it.haveFirstMeasure) {
                 true -> ": " + it.cocktailMeasure1
                 else -> ""
@@ -114,12 +120,24 @@ class CocktailDetailsViewModel(
                 )
                 else -> ""
             }
-        )
+        )}
     }
 
-    /** Call get, so we can display status immediately */
     init {
-        getCocktailResponse()
+        initializeUI()
+    }
+
+    private fun initializeUI() {
+        _viewVisibility.value = ViewVisibilityStatus.VIEW_INVISIBLE
+        coroutineScope.launch {
+            _cocktail.value = getCocktailIfWasSavedToDB(drinkId)
+            if (_cocktail.value == null) {
+                getCocktailResponse()
+            } else {
+                _internetStatus.value = null
+                _viewVisibility.value = ViewVisibilityStatus.VIEW_VISIBLE
+            }
+        }
     }
 
     private fun getCocktailResponse() {
@@ -128,18 +146,20 @@ class CocktailDetailsViewModel(
             coroutineScope.launch {
                 //This list only have 1 element
                 try {
-                    _status.value = CocktailApiStatus.LOADING
+                    _apiStatus.value = CocktailApiStatus.LOADING
                     val cocktailResult = repository.getCocktailDetails(drinkId)
-                    _status.value = CocktailApiStatus.DONE
                     if (cocktailResult.drinks?.size!! > 0) {
                         _cocktail.value = cocktailResult.drinks!!.toList()[0]
                     }
+                    _apiStatus.value = CocktailApiStatus.DONE
+                    _viewVisibility.value = ViewVisibilityStatus.VIEW_VISIBLE
                 } catch (e: Exception) {
-                    _status.value = CocktailApiStatus.ERROR
+                    _apiStatus.value = CocktailApiStatus.ERROR
                     Log.d("lilian", "ERROR getCocktailResponse in VM " + e.message)
                 }
             }
         } else {
+            _apiStatus.value = CocktailApiStatus.ERROR
             _internetStatus.value = InternetConnection.NO_INTERNET_CONNECTION
         }
     }
@@ -154,7 +174,7 @@ class CocktailDetailsViewModel(
 
     fun saveOrDeleteCocktailInFavorites() {
         coroutineScope.launch {
-            val cocktailInDB = cocktailWasSaved(drinkId)
+            val cocktailInDB = getCocktailIfWasSavedToDB(drinkId)
             if (cocktailInDB == null) {
                 _cocktail.value?.let {
                     repository.upsert(it)
@@ -168,7 +188,7 @@ class CocktailDetailsViewModel(
         }
     }
 
-    private suspend fun cocktailWasSaved(drinkId: String) : Cocktail? {
+    private suspend fun getCocktailIfWasSavedToDB(drinkId: String) : Cocktail? {
         return withContext(Dispatchers.IO) {
                 repository.getCocktailById(drinkId)
         }

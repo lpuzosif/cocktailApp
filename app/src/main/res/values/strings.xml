@@ -73,7 +73,6 @@
     <!--Used by Preferences END -->
 
     <!-- Values to check internet connection and api call status -->
-    <string name="check_your_internet_connection">Check your internet connection, the API call has fail</string>
     <string name="check_internet">Check you internet connection</string>
     <string name="api_call_failed">The API call has failed</string>
 

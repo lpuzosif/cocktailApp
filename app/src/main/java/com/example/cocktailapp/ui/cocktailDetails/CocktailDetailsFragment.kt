@@ -12,6 +12,7 @@ import com.example.cocktailapp.R
 import com.example.cocktailapp.databinding.CocktailDetailBinding
 import com.example.cocktailapp.db.CocktailDatabase
 import com.example.cocktailapp.repository.CocktailRepository
+import com.example.cocktailapp.ui.InternetConnection
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
@@ -25,7 +26,6 @@ class CocktailDetailsFragment : Fragment(){
      * Inflates the layout with Data Binding, sets its lifecycle owner to the CocktailDetailsFragment
      * to enable Data Binding to observe LiveData, and sets up the RecyclerView with an adapter
      */
-    @SuppressLint("RestrictedApi")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = CocktailDetailBinding.inflate(inflater)
 
@@ -64,14 +64,28 @@ class CocktailDetailsFragment : Fragment(){
             }
         })
 
-        val fab: FloatingActionButton = requireActivity().findViewById(R.id.fab)
-        fab.visibility = View.VISIBLE
-        fab.setOnClickListener {
-            sendEmail()
-        }
+        setFabButton()
         requireActivity().invalidateOptionsMenu()
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun setFabButton() {
+        val fab: FloatingActionButton = requireActivity().findViewById(R.id.fab)
+        fab.visibility = View.GONE
+        viewModel.loadingStatus.observe(viewLifecycleOwner, Observer {
+            if (it == CocktailApiStatus.DONE)
+               fab.visibility = View.VISIBLE
+        })
+        viewModel.internetStatus.observe(viewLifecycleOwner, Observer {
+            if (it == InternetConnection.HAS_INTERNET_CONNECTION)
+                fab.visibility = View.VISIBLE
+        })
+
+        fab.setOnClickListener {
+            sendEmail()
+        }
     }
 
     private fun sendEmail() {
@@ -89,6 +103,7 @@ class CocktailDetailsFragment : Fragment(){
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.main, menu)
+        setFavoriteActionVisibility(menu.findItem(R.id.action_favorite))
         menu.removeItem(R.id.action_settings)
     }
 
@@ -98,6 +113,18 @@ class CocktailDetailsFragment : Fragment(){
             true
         }else
             false
+    }
+
+    private fun setFavoriteActionVisibility(item: MenuItem) {
+        item.isVisible = false
+        viewModel.loadingStatus.observe(viewLifecycleOwner, Observer {
+            if (it == CocktailApiStatus.DONE)
+                item.isVisible = true
+        })
+        viewModel.internetStatus.observe(viewLifecycleOwner, Observer {
+            if (it == InternetConnection.HAS_INTERNET_CONNECTION)
+                item.isVisible = true
+        })
     }
 
     override fun onDestroyView() {

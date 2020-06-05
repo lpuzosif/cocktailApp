@@ -43,7 +43,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- <include layout="@layout/connection_view" />-->
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

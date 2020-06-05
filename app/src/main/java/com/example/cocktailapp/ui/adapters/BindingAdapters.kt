@@ -8,10 +8,12 @@ import androidx.core.net.toUri
 import androidx.core.view.get
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.cocktailapp.CocktailApplication.Companion.context
 import com.example.cocktailapp.R
 import com.example.cocktailapp.ui.InternetConnection
 import com.example.cocktailapp.ui.cocktailDetails.CocktailApiStatus
+import com.example.cocktailapp.ui.cocktailDetails.ViewVisibilityStatus
 
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
@@ -19,6 +21,7 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
         val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
         Glide.with(imgView.context)
             .load(imgUri)
+            .apply(RequestOptions().placeholder(R.drawable.loading_animation).error(R.drawable.ic_broken_image))
             .into(imgView)
     }
 }
@@ -51,29 +54,26 @@ fun showApiStatusImage(linearLayoutView : LinearLayout, apiStatus : CocktailApiS
             textView.text = context?.getString(R.string.api_call_failed)
         }
         CocktailApiStatus.DONE -> linearLayoutView.visibility = View.GONE
+        else -> linearLayoutView.visibility = View.GONE
     }
 }
 
 @BindingAdapter("apiStatusView")
 fun showApiStatusView(view : View, apiStatus : CocktailApiStatus?) {
-    //This is for the details screen and the search view visibility based on the api call status
+    //This is for the search view visibility on the main fragment based on the api call status
     when(apiStatus){
-        CocktailApiStatus.LOADING -> {
-            view.visibility = View.GONE
-        }
-        CocktailApiStatus.ERROR -> {
-            view.visibility = View.GONE
-        }
+        CocktailApiStatus.LOADING -> view.visibility = View.GONE
+        CocktailApiStatus.ERROR -> view.visibility = View.GONE
         CocktailApiStatus.DONE -> view.visibility = View.VISIBLE
+        else -> view.visibility = View.VISIBLE
     }
 }
 
 @BindingAdapter("internetStatus")
-fun showInternetStatusView(connectionLinearLayoutView : LinearLayout, internetStatus : InternetConnection?) {
+fun showInternetStatusImage(connectionLinearLayoutView : LinearLayout, internetStatus : InternetConnection?) {
     when(internetStatus){
-        InternetConnection.HAS_INTERNET_CONNECTION -> {
+        InternetConnection.HAS_INTERNET_CONNECTION ->
             connectionLinearLayoutView.visibility = View.INVISIBLE
-        }
         InternetConnection.NO_INTERNET_CONNECTION -> {
             connectionLinearLayoutView.visibility = View.VISIBLE
             //ImageView
@@ -84,18 +84,26 @@ fun showInternetStatusView(connectionLinearLayoutView : LinearLayout, internetSt
             textView.text = context?.getString(R.string.check_internet)
             textView.visibility = View.VISIBLE
         }
+        else -> connectionLinearLayoutView.visibility = View.INVISIBLE
     }
 }
 
 @BindingAdapter("internetStatusViewVisibility")
 fun viewVisibilityWithInternetStatus(view : View, internetStatus : InternetConnection?) {
-    //This is for the details screen and the search view visibility based on the device internet status
+    //This is for the details screen text views, the fab, the heart and the search view visibility based on the device internet status
     when(internetStatus){
-        InternetConnection.HAS_INTERNET_CONNECTION -> {
-            view.visibility = View.VISIBLE
-        }
-        InternetConnection.NO_INTERNET_CONNECTION -> {
-            view.visibility = View.GONE
-        }
+        InternetConnection.HAS_INTERNET_CONNECTION -> view.visibility = View.VISIBLE
+        InternetConnection.NO_INTERNET_CONNECTION -> view.visibility = View.GONE
+        else -> view.visibility = View.VISIBLE
+    }
+}
+
+@BindingAdapter("viewVisibility")
+fun viewVisibilityW(view : View, viewVisibilityStatus : ViewVisibilityStatus?) {
+    //This is for the details screen text views visibility
+    when(viewVisibilityStatus){
+        ViewVisibilityStatus.VIEW_VISIBLE -> view.visibility = View.VISIBLE
+        ViewVisibilityStatus.VIEW_INVISIBLE -> view.visibility = View.INVISIBLE
+        else -> view.visibility = View.VISIBLE
     }
 }

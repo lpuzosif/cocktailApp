@@ -1,18 +1,17 @@
 package com.example.cocktailapp.models
 
-import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.android.parcel.Parcelize
 import com.squareup.moshi.Json
-import java.io.Serializable
 
+// I don´t pass the entity to the details view using serializable or parcelable because the api on the list view only returns the imageUrl, the ID and the name
 @Entity(tableName = "cocktails")
 data class Cocktail (
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null,
     @Json(name = "strDrink") val cocktailName : String,
     @Json(name="strDrinkThumb") val cocktailImgSrcUrl : String,
+    //I will use the drink id as the cocktail price to show a fake price using transformations in the UI
     @Json(name="idDrink") val cocktailPrice : String,
     @Json(name="strGlass") val cocktailGlass : String?,
     @Json(name="strInstructions") val cocktailInstructions : String?,
@@ -27,7 +26,7 @@ data class Cocktail (
     @Json(name="strMeasure4") val cocktailMeasure4 : String?,
     @Json(name="strMeasure5") val cocktailMeasure5 : String?,
     @Json(name="dateModified") val cocktailDateModified : String?
-) : Serializable {
+) {
     val haveFirstMeasure get() = !cocktailMeasure1.isNullOrEmpty()
     val haveSecondIngredient get() = !cocktailIngredient2.isNullOrEmpty()
     val haveSecondMeasure get() = !cocktailMeasure2.isNullOrEmpty()

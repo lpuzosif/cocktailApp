@@ -18,7 +18,7 @@ class CocktailRepository(private val cocktailDB: CocktailDatabase) {
     fun getCocktailsFromDB() =
         cocktailDB.getCocktailDao().getAllCocktails()
 
-    suspend fun getCocktailById(cocktailId: String ) =
+    fun getCocktailById(cocktailId: String ) =
         cocktailDB.getCocktailDao().getCocktailById(cocktailId)
 
     suspend fun delete(cocktail: Cocktail) =
