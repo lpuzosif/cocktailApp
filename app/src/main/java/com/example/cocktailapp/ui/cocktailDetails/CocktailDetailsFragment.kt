@@ -74,8 +74,8 @@ class CocktailDetailsFragment : Fragment(){
     private fun setFabButton() {
         val fab: FloatingActionButton = requireActivity().findViewById(R.id.fab)
         fab.visibility = View.GONE
-        viewModel.loadingStatus.observe(viewLifecycleOwner, Observer {
-            if (it == CocktailApiStatus.DONE)
+        viewModel.viewVisibility.observe(viewLifecycleOwner, Observer {
+            if (it == ViewVisibilityStatus.VIEW_VISIBLE)
                fab.visibility = View.VISIBLE
         })
         viewModel.internetStatus.observe(viewLifecycleOwner, Observer {
@@ -117,8 +117,8 @@ class CocktailDetailsFragment : Fragment(){
 
     private fun setFavoriteActionVisibility(item: MenuItem) {
         item.isVisible = false
-        viewModel.loadingStatus.observe(viewLifecycleOwner, Observer {
-            if (it == CocktailApiStatus.DONE)
+        viewModel.viewVisibility.observe(viewLifecycleOwner, Observer {
+            if (it == ViewVisibilityStatus.VIEW_VISIBLE)
                 item.isVisible = true
         })
         viewModel.internetStatus.observe(viewLifecycleOwner, Observer {
