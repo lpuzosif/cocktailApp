@@ -14,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-enum class InternetConnection { HAS_INTERNET_CONNECTION, NO_INTERNET_CONNECTION }
+enum class InternetConnection { HAS_INTERNET_CONNECTION, NO_INTERNET_CONNECTION, ANY }
 
 class CocktailListViewModel(
     cocktailTypeParameter: String,

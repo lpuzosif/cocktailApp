@@ -43,27 +43,6 @@ class CocktailDetailsFragment : Fragment(){
         // Giving the binding access to the CocktailDetailsViewModel
         binding.cocktailDetailsVieModel = viewModel
 
-        viewModel.insertedToBDStatus.observe(viewLifecycleOwner, Observer {
-            if(it) {
-                snackBar = Snackbar.make(requireActivity().findViewById(R.id.cocktail_details_container), requireContext().getString(R.string.cocktail_saved_message),
-                    Snackbar.LENGTH_SHORT).apply {
-                    view.setBackgroundColor(resources.getColor(R.color.successfulColor))
-                    show()
-                }
-            }
-        })
-
-        viewModel.deletedFromBDStatus.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                snackBar = Snackbar.make(requireActivity().findViewById(R.id.cocktail_details_container), requireContext().getString(R.string.cocktail_deleted_successfully_from_favorites),
-                    Snackbar.LENGTH_SHORT).apply {
-                    view.setBackgroundColor(resources.getColor(R.color.successfulColor))
-                    show()
-                }
-                viewModel.deletedFromBDMessageCompleted()
-            }
-        })
-
         setFabButton()
         requireActivity().invalidateOptionsMenu()
         setHasOptionsMenu(true)
@@ -101,11 +80,62 @@ class CocktailDetailsFragment : Fragment(){
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu, this adds items to the action bar if it is present
         inflater.inflate(R.menu.main, menu)
-        setFavoriteActionVisibility(menu.findItem(R.id.action_favorite))
+        val favorite = menu.findItem(R.id.action_favorite)
+        setFavoriteActionVisibility(favorite)
         menu.removeItem(R.id.action_settings)
+
+        checkCocktailInDb(favorite)
     }
+
+    private fun setFavoriteActionVisibility(item: MenuItem) {
+        item.isVisible = false
+        viewModel.viewVisibility.observe(viewLifecycleOwner, Observer {
+            if (it == ViewVisibilityStatus.VIEW_VISIBLE) {
+                item.isVisible = true
+            }
+        })
+        viewModel.internetStatus.observe(viewLifecycleOwner, Observer {
+            if (it == InternetConnection.HAS_INTERNET_CONNECTION){
+                item.isVisible = true
+            }
+        })
+    }
+
+    private fun checkCocktailInDb(favorite: MenuItem) {
+        viewModel.insertedToBDStatus.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                snackBar = Snackbar.make(requireActivity().findViewById(R.id.cocktail_details_container), requireContext().getString(R.string.cocktail_saved_message),
+                    Snackbar.LENGTH_SHORT
+                ).apply {
+                    view.setBackgroundColor(resources.getColor(R.color.successfulColor))
+                    show()
+                }
+                favorite.setIcon(R.drawable.ic_favorite_white)
+            }
+        })
+
+        viewModel.deletedFromBDStatus.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                snackBar = Snackbar.make(requireActivity().findViewById(R.id.cocktail_details_container), requireContext().getString(R.string.cocktail_deleted_successfully_from_favorites),
+                    Snackbar.LENGTH_SHORT
+                ).apply {
+                    view.setBackgroundColor(resources.getColor(R.color.successfulColor))
+                    show()
+                }
+                favorite.setIcon(R.drawable.ic_menu_favorite)
+                viewModel.deletedFromBDMessageCompleted()
+            }
+        })
+
+        viewModel.cocktailInBD.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                favorite.setIcon(R.drawable.ic_favorite_white)
+            }
+        })
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if(item.itemId == R.id.action_favorite) {
@@ -113,18 +143,6 @@ class CocktailDetailsFragment : Fragment(){
             true
         }else
             false
-    }
-
-    private fun setFavoriteActionVisibility(item: MenuItem) {
-        item.isVisible = false
-        viewModel.viewVisibility.observe(viewLifecycleOwner, Observer {
-            if (it == ViewVisibilityStatus.VIEW_VISIBLE)
-                item.isVisible = true
-        })
-        viewModel.internetStatus.observe(viewLifecycleOwner, Observer {
-            if (it == InternetConnection.HAS_INTERNET_CONNECTION)
-                item.isVisible = true
-        })
     }
 
     override fun onDestroyView() {

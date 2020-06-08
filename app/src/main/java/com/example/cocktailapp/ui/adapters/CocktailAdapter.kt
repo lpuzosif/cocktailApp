@@ -2,14 +2,13 @@ package com.example.cocktailapp.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cocktailapp.databinding.CocktailItemViewBinding
 
 import com.example.cocktailapp.models.Cocktail
 
-class CocktailAdapter (private val clickListener: CocktailClickListener) : ListAdapter<Cocktail, CocktailAdapter.ViewHolder>(CocktailDiffCallbackList()) {
+class CocktailAdapter (private val clickListener: CocktailClickListener) : ListAdapter<Cocktail, CocktailAdapter.ViewHolder>(CocktailDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -40,17 +39,6 @@ class CocktailAdapter (private val clickListener: CocktailClickListener) : ListA
                 return ViewHolder(binding)
             }
         }
-    }
-}
-
-//To update only the item that have changed if it´s on the screen
-class CocktailDiffCallbackList : DiffUtil.ItemCallback<Cocktail>() {
-    override fun areItemsTheSame(oldItem: Cocktail, newItem: Cocktail): Boolean {
-        return oldItem === newItem
-    }
-
-    override fun areContentsTheSame(oldItem: Cocktail, newItem: Cocktail): Boolean {
-        return oldItem.cocktailPrice == newItem.cocktailPrice
     }
 }
 

@@ -2,7 +2,6 @@ package com.example.cocktailapp.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cocktailapp.databinding.CocktailPhotoItemViewBinding
@@ -41,13 +40,3 @@ class GalleryAdapter : ListAdapter<Cocktail, GalleryAdapter.ViewHolder>(Cocktail
     }
 }
 
-//To update only the item that have changed if it´s on the screen
-class CocktailDiffCallback : DiffUtil.ItemCallback<Cocktail>() {
-    override fun areItemsTheSame(oldItem: Cocktail, newItem: Cocktail): Boolean {
-        return oldItem === newItem
-    }
-
-    override fun areContentsTheSame(oldItem: Cocktail, newItem: Cocktail): Boolean {
-        return oldItem.cocktailPrice == newItem.cocktailPrice
-    }
-}

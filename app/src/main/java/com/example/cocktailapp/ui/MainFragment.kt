@@ -71,7 +71,6 @@ class MainFragment : Fragment() {
 
         viewModel.navigateToSelectedDrink.observe(viewLifecycleOwner, Observer {
             if(it != null) {
-                hideTheKeyboard()
                 val bundle = bundleOf( "drinkId" to it)
                 this.findNavController().navigate(R.id.action_nav_home_to_cocktailDetailsFragment, bundle)
                 viewModel.displayCocktailDetailsComplete()
@@ -109,7 +108,6 @@ class MainFragment : Fragment() {
                 editable?.let {
                     viewModel.getCocktailByNameWhenUsersTypes(editable.toString())
                     adapter.submitList(viewModel.cocktailListByGivenName.value)
-
                 }
             }
         }

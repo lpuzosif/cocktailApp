@@ -24,10 +24,13 @@ class CocktailDetailsViewModel(
     private val _cocktail = MutableLiveData<Cocktail>()
     val cocktail: LiveData<Cocktail> get() = _cocktail
 
+    private val _cocktailInBD = MutableLiveData<Boolean>()
+    val cocktailInBD: LiveData<Boolean> get() = _cocktailInBD
+
     // The internal MutableLiveData String that stores the status of the most recent request
     private val _apiStatus = MutableLiveData<CocktailApiStatus>()
     // The external immutable LiveData for the request status String
-    val loadingStatus: LiveData<CocktailApiStatus> get() = _apiStatus
+    val apiStatus: LiveData<CocktailApiStatus> get() = _apiStatus
 
     // The internal MutableLiveData String that stores the internet device status
     private val _internetStatus = MutableLiveData<InternetConnection>()
@@ -129,20 +132,23 @@ class CocktailDetailsViewModel(
 
     private fun initializeUI() {
         _viewVisibility.value = ViewVisibilityStatus.VIEW_INVISIBLE
+        _apiStatus.value = CocktailApiStatus.LOADING
         coroutineScope.launch {
             _cocktail.value = getCocktailIfWasSavedToDB(drinkId)
             if (_cocktail.value == null) {
                 getCocktailResponse()
+                _cocktailInBD.value = false
             } else {
-                _internetStatus.value = null
+                _internetStatus.value = InternetConnection.ANY
                 _viewVisibility.value = ViewVisibilityStatus.VIEW_VISIBLE
+                _cocktailInBD.value = true
             }
         }
     }
 
     private fun getCocktailResponse() {
         if (Utils.hasInternetConnection()) {
-            _internetStatus.value = InternetConnection.HAS_INTERNET_CONNECTION
+            //_internetStatus.value = InternetConnection.HAS_INTERNET_CONNECTION
             coroutineScope.launch {
                 //This list only have 1 element
                 try {
@@ -159,7 +165,6 @@ class CocktailDetailsViewModel(
                 }
             }
         } else {
-            _apiStatus.value = CocktailApiStatus.ERROR
             _internetStatus.value = InternetConnection.NO_INTERNET_CONNECTION
         }
     }
@@ -180,7 +185,6 @@ class CocktailDetailsViewModel(
                     repository.upsert(it)
                     _insertedToBDStatus.value = true
                 }
-
             } else {
                 _insertedToBDStatus.value = false
                 deleteFavoriteCocktailFromDB(cocktailInDB)

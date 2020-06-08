@@ -14,7 +14,8 @@
             android:title="@string/menu_gallery" />
         <item
             android:id="@+id/nav_favorites"
-            android:icon="@drawable/ic_menu_favorite"
+            android:icon="@drawable/ic_favorite_white"
+            android:iconTint="#111112"
             android:title="@string/menu_favorites" />
     </group>
 </menu>

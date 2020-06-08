@@ -51,6 +51,7 @@ class FavoritesFragment : Fragment() {
 
         // Fill the List
         favoritesViewModel.cocktailList.observe(viewLifecycleOwner, Observer {
+            showMessageWhenEmptyList(it?.size == 0, binding)
             it?.let {
                 adapter.submitList(it)
             }
@@ -59,11 +60,6 @@ class FavoritesFragment : Fragment() {
         // Add dividers between RecyclerView's row items
         val decoration = DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL)
         binding.cocktailsFavoritesRecycleView.addItemDecoration(decoration)
-
-        favoritesViewModel.cocktailList.observe(viewLifecycleOwner, Observer {
-            showMessageWhenEmptyList(it?.size == 0, binding)
-            adapter.submitList(it)
-        })
 
         setRemoveWithUndoOptionOnItem(adapter, favoritesViewModel, binding)
 

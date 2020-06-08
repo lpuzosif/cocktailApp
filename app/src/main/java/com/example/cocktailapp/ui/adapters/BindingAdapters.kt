@@ -28,7 +28,7 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
 
 @BindingAdapter("priceInList")
 fun reformatPriceInList(textView: TextView, price: String?) {
-    var priceFormatted = "$" + price?.subSequence(0, 2).toString() + "."  + price?.subSequence(2, 4).toString()
+    val priceFormatted = "$" + price?.subSequence(0, 2).toString() + "."  + price?.subSequence(2, 4).toString()
     textView.text = priceFormatted
 }
 
@@ -54,7 +54,6 @@ fun showApiStatusImage(linearLayoutView : LinearLayout, apiStatus : CocktailApiS
             textView.text = context?.getString(R.string.api_call_failed)
         }
         CocktailApiStatus.DONE -> linearLayoutView.visibility = View.GONE
-        else -> linearLayoutView.visibility = View.GONE
     }
 }
 
@@ -65,7 +64,6 @@ fun showApiStatusView(view : View, apiStatus : CocktailApiStatus?) {
         CocktailApiStatus.LOADING -> view.visibility = View.GONE
         CocktailApiStatus.ERROR -> view.visibility = View.GONE
         CocktailApiStatus.DONE -> view.visibility = View.VISIBLE
-        else -> view.visibility = View.VISIBLE
     }
 }
 
@@ -84,17 +82,17 @@ fun showInternetStatusImage(connectionLinearLayoutView : LinearLayout, internetS
             textView.text = context?.getString(R.string.check_internet)
             textView.visibility = View.VISIBLE
         }
-        else -> connectionLinearLayoutView.visibility = View.INVISIBLE
+        InternetConnection.ANY -> connectionLinearLayoutView.visibility = View.INVISIBLE
     }
 }
 
 @BindingAdapter("internetStatusViewVisibility")
 fun viewVisibilityWithInternetStatus(view : View, internetStatus : InternetConnection?) {
-    //This is for the details screen text views, the fab, the heart and the search view visibility based on the device internet status
+    //This is for the fab, the heart and the search view visibility based on the device internet status
     when(internetStatus){
         InternetConnection.HAS_INTERNET_CONNECTION -> view.visibility = View.VISIBLE
         InternetConnection.NO_INTERNET_CONNECTION -> view.visibility = View.GONE
-        else -> view.visibility = View.VISIBLE
+        InternetConnection.ANY -> view.visibility = View.VISIBLE
     }
 }
 
@@ -104,6 +102,5 @@ fun viewVisibilityW(view : View, viewVisibilityStatus : ViewVisibilityStatus?) {
     when(viewVisibilityStatus){
         ViewVisibilityStatus.VIEW_VISIBLE -> view.visibility = View.VISIBLE
         ViewVisibilityStatus.VIEW_INVISIBLE -> view.visibility = View.INVISIBLE
-        else -> view.visibility = View.VISIBLE
     }
 }
